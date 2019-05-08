@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from 'react';
+
+import { useViewMode } from './Hooks/useViewMode';
+import IndexView from './Views/Index';
+import KioskView from './Views/Kiosk';
+import UserView from './Views/User';
 
 const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  const { mode } = useViewMode();
+
+  if (mode === 'kiosk') {
+    return (
+      <Suspense fallback={<p>Lade Daten...</p>}>
+        <KioskView />
+      </Suspense>
+    );
+  }
+
+  if (mode === 'user') {
+    return <UserView />;
+  }
+
+  // default ot index mode
+  return <IndexView />;
+};
 
 export default App;
