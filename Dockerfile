@@ -1,9 +1,8 @@
 # Stage 1 - the build process
 FROM node:8 as build
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
 COPY . ./
+RUN npm ci
 RUN npm run build
 
 # Stage 2 - the production environment
