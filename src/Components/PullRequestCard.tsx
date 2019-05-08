@@ -43,6 +43,7 @@ const Project = styled.div`
   align-items: center;
   padding: 20px;
   box-shadow: inset -17px 59px 39px -69px rgba(0, 0, 0, 0.25);
+  font-size: 20px;
 
   img {
     margin-right: 10px;
@@ -51,6 +52,19 @@ const Project = styled.div`
 const Section = styled.div`
   border-top: 1px solid ${props => props.theme.colors.contrast};
   padding: 20px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+`;
+
+const ReviewCount = styled.div<{ count: number }>`
+  display: inline-flex;
+  align-items: flex;
+  padding: 10px;
+  margin-right: 20px;
+  border-radius: 50%;
+  color: ${props => props.theme.colors.white};
+  background-color: ${props => (props.count > 0 ? props.theme.colors.success : props.theme.colors.warning)};
 `;
 
 const MergeButton = styled.a<{ mergeState: 'ready' | 'block' | 'warn' }>`
@@ -85,6 +99,14 @@ const PullRequestCard: React.FC<latestPrs_search_nodes_PullRequest> = React.memo
         <FontAwesomeIcon style={{ marginRight: '10px' }} icon={['fas', 'code-branch']} />
         {props.baseRefName} <FontAwesomeIcon style={{ margin: '0 10px' }} icon={['fas', 'arrow-circle-left']} /> {props.headRefName.substring(0, 30)}
         {props.headRefName.length > 30 && '...'}
+      </Section>
+      <Section>
+        <ReviewCount count={props.reviews.totalCount}>
+          <FontAwesomeIcon icon={['fas', 'check-double']} size="1x" />
+        </ReviewCount>
+        {props.reviews.nodes.map(n => (
+          <Avatar size={30} src={n.author.avatarUrl} />
+        ))}
       </Section>
       <MergeButton target="_blank" href={props.permalink} mergeState={mergeState}>
         <FontAwesomeIcon icon={['fas', mergeIcon]} size="2x" />

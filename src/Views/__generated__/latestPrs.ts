@@ -12,12 +12,32 @@ export interface latestPrs_search_nodes_Repository {
   __typename: "Repository" | "User" | "Organization" | "MarketplaceListing";
 }
 
+export interface latestPrs_search_nodes_PullRequest_reviews_nodes_author {
+  __typename: "Organization" | "User" | "Bot";
+  /**
+   * A URL pointing to the actor's public avatar.
+   */
+  avatarUrl: any;
+}
+
+export interface latestPrs_search_nodes_PullRequest_reviews_nodes {
+  __typename: "PullRequestReview";
+  /**
+   * The actor who authored the comment.
+   */
+  author: latestPrs_search_nodes_PullRequest_reviews_nodes_author | null;
+}
+
 export interface latestPrs_search_nodes_PullRequest_reviews {
   __typename: "PullRequestReviewConnection";
   /**
    * Identifies the total count of items in the connection.
    */
   totalCount: number;
+  /**
+   * A list of nodes.
+   */
+  nodes: (latestPrs_search_nodes_PullRequest_reviews_nodes | null)[] | null;
 }
 
 export interface latestPrs_search_nodes_PullRequest_repository_owner {

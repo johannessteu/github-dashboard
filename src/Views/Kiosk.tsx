@@ -32,8 +32,13 @@ const LATEST_PRS = gql`
           deletions
           additions
           permalink
-          reviews {
+          reviews(first: 10) {
             totalCount
+            nodes {
+              author {
+                avatarUrl
+              }
+            }
           }
           repository {
             name
@@ -65,7 +70,7 @@ const KioskView: React.FC = () => {
 
   const fetchPrs = useCallback(() => {
     const orgString = selectedOrganizations.length > 0 ? selectedOrganizations.map(e => 'org:' + e).join(' ') : 'author:' + login;
-    const queryString = orgString + ' is:open';
+    const queryString = orgString + ' is:open is:pr';
 
     client.query<latestPrs, latestPrsVariables>({ query: LATEST_PRS, fetchPolicy: 'network-only', variables: { first: 20, query: queryString } }).then(({ data, loading }) => {
       if (!loading && data && data.search) {
@@ -73,7 +78,7 @@ const KioskView: React.FC = () => {
           search: { nodes }
         } = data;
 
-        const filteredAndSorted = nodes.filter(n => n.__typename === 'PullRequest');
+        const filteredAndSorted = nodes.filter(n => n.__typename === 'PullRequest' && n.title.indexOf('WIP') < 0);
         setPrs(filteredAndSorted);
       }
     });
