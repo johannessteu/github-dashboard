@@ -78,7 +78,7 @@ const KioskView: React.FC = () => {
           search: { nodes }
         } = data;
 
-        const filteredAndSorted = nodes.filter(n => n.__typename === 'PullRequest' && n.title.indexOf('WIP') < 0);
+        const filteredAndSorted = nodes.filter(n => n.__typename === 'PullRequest' && n.title.indexOf('WIP') < 0 && n.mergeStateStatus !== 'DRAFT');
         setPrs(filteredAndSorted);
       }
     });
