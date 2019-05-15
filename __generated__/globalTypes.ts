@@ -29,6 +29,17 @@ export enum MergeableState {
   UNKNOWN = "UNKNOWN",
 }
 
+/**
+ * The possible states of a pull request review.
+ */
+export enum PullRequestReviewState {
+  APPROVED = "APPROVED",
+  CHANGES_REQUESTED = "CHANGES_REQUESTED",
+  COMMENTED = "COMMENTED",
+  DISMISSED = "DISMISSED",
+  PENDING = "PENDING",
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

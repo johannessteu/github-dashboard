@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MergeStateStatus, MergeableState } from "./../../../__generated__/globalTypes";
+import { MergeStateStatus, MergeableState, PullRequestReviewState } from "./../../../__generated__/globalTypes";
 
 // ====================================================
 // GraphQL query operation: latestPrs
@@ -26,6 +26,10 @@ export interface latestPrs_search_nodes_PullRequest_reviews_nodes {
    * The actor who authored the comment.
    */
   author: latestPrs_search_nodes_PullRequest_reviews_nodes_author | null;
+  /**
+   * Identifies the current state of the pull request review.
+   */
+  state: PullRequestReviewState;
 }
 
 export interface latestPrs_search_nodes_PullRequest_reviews {

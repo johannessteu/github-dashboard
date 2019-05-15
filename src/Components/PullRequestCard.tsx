@@ -64,7 +64,7 @@ const ReviewCount = styled.div<{ count: number }>`
   margin-right: 20px;
   border-radius: 50%;
   color: ${props => props.theme.colors.white};
-  background-color: ${props => (props.count > 0 ? props.theme.colors.success : props.theme.colors.warning)};
+  background-color: ${props => (props.count > 0 ? props.theme.colors.success : props.theme.colors.error)};
 `;
 
 const MergeButton = styled.a<{ mergeState: 'ready' | 'block' | 'warn' }>`
@@ -92,21 +92,25 @@ const PullRequestCard: React.FC<latestPrs_search_nodes_PullRequest> = React.memo
         <Avatar size={25} src={props.repository.owner.avatarUrl} /> {props.repository.name}
       </Project>
       <Section>
-        {props.permalink}
-        {props.reviews.totalCount}
-      </Section>
-      <Section>
         <FontAwesomeIcon style={{ marginRight: '10px' }} icon={['fas', 'code-branch']} />
         {props.baseRefName} <FontAwesomeIcon style={{ margin: '0 10px' }} icon={['fas', 'arrow-circle-left']} /> {props.headRefName.substring(0, 30)}
         {props.headRefName.length > 30 && '...'}
       </Section>
       <Section>
-        <ReviewCount count={props.reviews.totalCount}>
-          <FontAwesomeIcon icon={['fas', 'check-double']} size="1x" />
-        </ReviewCount>
-        {props.reviews.nodes.map(n => (
-          <Avatar size={30} src={n.author.avatarUrl} />
-        ))}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex' }}>
+            <ReviewCount count={1}>
+              <FontAwesomeIcon icon={['fas', 'check-double']} size="1x" />
+            </ReviewCount>
+            {props.reviews.nodes.map(n => (n.state === 'APPROVED' ? <Avatar key={n.author.avatarUrl} size={36} src={n.author.avatarUrl} /> : null))}
+          </div>
+          <div style={{ display: 'flex' }}>
+            <ReviewCount count={0}>
+              <FontAwesomeIcon icon={['fas', 'check-double']} size="1x" />
+            </ReviewCount>
+            {props.reviews.nodes.map(n => (n.state === 'CHANGES_REQUESTED' ? <Avatar key={n.author.avatarUrl} size={36} src={n.author.avatarUrl} /> : null))}
+          </div>
+        </div>
       </Section>
       <MergeButton target="_blank" href={props.permalink} mergeState={mergeState}>
         <FontAwesomeIcon icon={['fas', mergeIcon]} size="2x" />

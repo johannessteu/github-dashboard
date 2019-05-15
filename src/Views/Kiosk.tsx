@@ -38,6 +38,7 @@ const LATEST_PRS = gql`
               author {
                 avatarUrl
               }
+              state
             }
           }
           repository {
