@@ -78,10 +78,6 @@ const AppPanel: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (mode === 'index') {
-    return null;
-  }
-
   return (
     <Panel mode={mode}>
       <div>
