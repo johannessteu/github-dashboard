@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useState } from 'react';
 
-export type ViewMode = 'index' | 'user' | 'kiosk';
+export type ViewMode = 'user' | 'kiosk';
 
 export const allModes: ViewMode[] = ['user', 'kiosk'];
 
@@ -16,7 +16,7 @@ interface ViewModeProviderProps {
   children: React.ReactNode;
 }
 const ViewModeProvider = (props: ViewModeProviderProps) => {
-  const [mode, setMode] = useState<ViewMode>('index');
+  const [mode, setMode] = useState<ViewMode>('kiosk');
 
   const value = React.useMemo(() => {
     return {
