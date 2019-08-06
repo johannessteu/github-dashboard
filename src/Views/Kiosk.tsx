@@ -7,11 +7,18 @@ import gql from 'graphql-tag';
 
 import styled from '../Theme/styled-components';
 import { useApolloClient } from 'react-apollo-hooks';
+import { node } from 'prop-types';
+import Spinner from '../Components/Ui/Spinner';
 
 const PRWrapper = styled.div`
   display: flex;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  justify-content: space-between;
+  padding: 20px;
+
+  @media screen and (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const LATEST_PRS = gql`
@@ -62,6 +69,7 @@ const LATEST_PRS = gql`
 `;
 
 const KioskView: React.FC = () => {
+  const [loaded, setLoaded] = useState(false);
   const [prs, setPrs] = useState([]);
   const {
     selectedOrganizations,
@@ -70,19 +78,35 @@ const KioskView: React.FC = () => {
   const client = useApolloClient();
 
   const fetchPrs = useCallback(() => {
-    const orgString = selectedOrganizations.length > 0 ? selectedOrganizations.map(e => 'org:' + e).join(' ') : 'author:' + login;
+    const orgString =
+      selectedOrganizations.length > 0
+        ? selectedOrganizations.map(e => 'org:' + e).join(' ')
+        : 'author:' + login;
     const queryString = orgString + ' is:open is:pr';
 
-    client.query<latestPrs, latestPrsVariables>({ query: LATEST_PRS, fetchPolicy: 'network-only', variables: { first: 20, query: queryString } }).then(({ data, loading }) => {
-      if (!loading && data && data.search) {
-        const {
-          search: { nodes }
-        } = data;
+    client
+      .query<latestPrs, latestPrsVariables>({
+        query: LATEST_PRS,
+        fetchPolicy: 'network-only',
+        variables: { first: 20, query: queryString }
+      })
+      .then(({ data, loading }) => {
+        if (!loading && data && data.search) {
+          const {
+            search: { nodes }
+          } = data;
 
-        const filteredAndSorted = nodes.filter(n => n.__typename === 'PullRequest' && n.title.indexOf('WIP') < 0 && n.mergeStateStatus !== 'DRAFT');
-        setPrs(filteredAndSorted);
-      }
-    });
+          const filteredAndSorted = nodes.filter(
+            n =>
+              n.__typename === 'PullRequest' &&
+              n.mergeStateStatus !== 'UNKNOWN' &&
+              n.title.indexOf('WIP') < 0 &&
+              n.mergeStateStatus !== 'DRAFT'
+          );
+          setPrs(filteredAndSorted);
+          setLoaded(true);
+        }
+      });
   }, [client, login, selectedOrganizations]);
 
   useEffect(() => {
@@ -91,7 +115,24 @@ const KioskView: React.FC = () => {
     return () => clearInterval(i);
   }, [selectedOrganizations, fetchPrs]);
 
-  return <PRWrapper>{prs.map(pr => pr.__typename === 'PullRequest' && <PullRequestCard key={pr.id} {...pr} />)}</PRWrapper>;
+  if (loaded === false) {
+    return (
+      <PRWrapper>
+        <Spinner />
+      </PRWrapper>
+    );
+  }
+
+  return (
+    <PRWrapper>
+      {prs.map(
+        pr =>
+          pr.__typename === 'PullRequest' && (
+            <PullRequestCard key={pr.id} {...pr} />
+          )
+      )}
+    </PRWrapper>
+  );
 };
 
 export default KioskView;
