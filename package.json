@@ -33,7 +33,7 @@
     "eject": "react-scripts eject",
     "codegen:watch": "npx apollo client:codegen --target=typescript --watch",
     "codegen:build": "npx apollo client:codegen --target=typescript",
-    "graphql:downloadschema": "npx apollo service:download --endpoint=https://api.github.com/graphql src/github-schema.json --header='Authorization: bearer 5050f74e62826acd3ca052326f4d42211c101370' --header='Accept: application/vnd.github.merge-info-preview+json'"
+    "graphql:downloadschema": "npx apollo service:download --endpoint=https://api.github.com/graphql src/github-schema.json --header='Authorization: bearer .' --header='Accept: application/vnd.github.merge-info-preview+json'"
   },
   "eslintConfig": {
     "extends": "react-app"
