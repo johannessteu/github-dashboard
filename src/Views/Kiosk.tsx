@@ -82,7 +82,7 @@ const KioskView: React.FC = () => {
       selectedOrganizations.length > 0
         ? selectedOrganizations.map(e => 'org:' + e).join(' ')
         : 'author:' + login;
-    const queryString = orgString + ' is:open is:pr';
+    const queryString = orgString + ' is:open is:pr ! label:dependencies';
 
     client
       .query<latestPrs, latestPrsVariables>({
